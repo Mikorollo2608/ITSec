@@ -32,7 +32,7 @@ def restore(destination_ip, source_ip):
 
 
 target_ip = "10.10.10.20"  # Enter your target IP
-gateway_ip = "10.10.10.10"  # Enter your gateway's IP
+gateway_ip = "10.10.10.254"  # Enter your gateway's IP
 
 try:
     sent_packets_count = 0
