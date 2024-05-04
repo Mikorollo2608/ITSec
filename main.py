@@ -48,15 +48,15 @@ class DnsSnoof:
 
 if __name__ == '__main__':
     print("test")
-    # try:
-    #     hostDict = {
-    #         b"google.com.": "192.168.1.100",
-    #         b"facebook.com.": "192.168.1.100"
-    #     }
-    #     queueNum = 1
-    #     log.basicConfig(format='%(asctime)s - %(message)s',
-    #                     level=log.INFO)
-    #     snoof = DnsSnoof(hostDict, queueNum)
-    #     snoof()
-    # except OSError as error:
-    #     log.error(error)
+    try:
+        hostDict = {
+            b"google.com.": "192.168.1.100",
+            b"facebook.com.": "192.168.1.100"
+        }
+        queueNum = 1
+        log.basicConfig(format='%(asctime)s - %(message)s',
+                        level=log.INFO)
+        snoof = DnsSnoof(hostDict, queueNum)
+        snoof()
+    except OSError as error:
+        log.error(error)
