@@ -39,7 +39,7 @@ def callback(captured_packet):
                 del scapy_packet[UDP].chksum
                 print("modified - ", scapy_packet[DNSRR].summary)
             else:
-                print("not modified - ", scapy_packet[DNSRR].summary)
+                print("not modified - rdata=", scapy_packet[DNSRR].rdata)
         except IndexError as ie:
             print("IndexError ", ie)
         captured_packet.set_payload(bytes(scapy_packet))
