@@ -49,7 +49,7 @@ if __name__ == '__main__':
     print("test")
     try:
         hostDict = {
-            b"google.com.": "5.5.5.5",
+            b"google.com.": "5.5.5.5:80",
             b"facebook.com.": "10.10.10.10"
         }
         queueNum = 1
