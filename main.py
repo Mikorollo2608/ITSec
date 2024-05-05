@@ -1,7 +1,6 @@
 import os
 import logging as log
 
-# from scapy.all import IP, DNSRR, DNS, UDP, DNSQR
 from scapy.layers.inet import IP, UDP
 from scapy.layers.dns import DNS, DNSRR, DNSQR
 from netfilterqueue import NetfilterQueue
@@ -50,7 +49,7 @@ if __name__ == '__main__':
     print("test")
     try:
         hostDict = {
-            b"google.com.": "10.10.10.10",
+            b"google.com.": "5.5.5.5",
             b"facebook.com.": "10.10.10.10"
         }
         queueNum = 1

@@ -4,8 +4,8 @@ import time
 
 
 def get_mac(ip):
-    mac = "xx"
-    while mac == "xx":
+    mac = "x"
+    while mac == "x":
         try:
             arp_request = ARP(pdst=ip)
             broadcast = Ether(dst="ff:ff:ff:ff:ff:ff")
@@ -14,7 +14,6 @@ def get_mac(ip):
             mac = answered_list[0][1].hwsrc
         except:
             print("No mac")
-            pass
         finally:
             return mac
 
