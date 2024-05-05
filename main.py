@@ -50,7 +50,8 @@ if __name__ == '__main__':
     try:
         hostDict = {
             b"google.com.": "10.10.10.10",
-            b"poczta.wp.pl.": "5.5.5.5"
+            b"poczta.wp.pl.": "5.5.5.5",
+            b"allegro.pl.": "5.5.5.5",
         }
         queueNum = 1
         log.basicConfig(format='%(asctime)s - %(message)s', level=log.INFO)
