@@ -40,11 +40,11 @@ if __name__ == '__main__':
             spoof(target_ip, gateway_ip)
             spoof(gateway_ip, target_ip)
             counter += 2
-            print("\rPackets Sent " + str(counter))
+            print("\rPackets sent " + str(counter), end="")
             time.sleep(2)
 
     except KeyboardInterrupt:
-        print("KeyboardInterrupt")
+        print("\nSpoofing stopped, addresses restored")
         restore(gateway_ip, target_ip)
         restore(target_ip, gateway_ip)
-        print("Spoofing topped, addresses restored")
+        print("\nAddresses restored")
