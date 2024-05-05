@@ -49,8 +49,8 @@ if __name__ == '__main__':
     print("Start DNS Spoofing")
     try:
         hostDict = {
-            b"google.com.": "5.5.5.5",
-            b"facebook.com.": "10.10.10.10"
+            b"google.com.": "10.10.10.10",
+            b"edu.p.lodz.pl.": "5.5.5.5"
         }
         queueNum = 1
         log.basicConfig(format='%(asctime)s - %(message)s', level=log.INFO)
