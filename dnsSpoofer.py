@@ -28,7 +28,7 @@ def callback(captured_packet):
     scapy_packet = IP(captured_packet.get_payload())
     if scapy_packet.haslayer(DNSRR):
         try:
-            print("original - ", scapy_packet.mysummary())
+            print("original - ", scapy_packet[DNSQR].summary())
             # log.info(f'[original] {scapy_packet[DNSRR].summary()}')
             query_name = scapy_packet[DNSQR].qname
             if query_name in host_dict:
